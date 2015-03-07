@@ -10,19 +10,22 @@ using minftgl::Font;
 using minftgl::Label;
 
 Font* font;
-Label* label;
+Label* label1;
+Label* label2;
 
 void InitResource(){
     glEnable(GL_BLEND);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     font = new Font("fonts/test1.ttf");
-    label = new Label(L"中文字測試", font);
+    label1 = new Label(L"中文字你我他", font);
+    label2 = new Label(L"哈哈哈", font);
     return;
 }
 
 void Display(){
-    fprintf(stderr, "r");
-    label->Render(1, 1);
+    label1->Render(0, 0);
+    label2->Render(-0.5, -0.5);
+    glutSwapBuffers();
     return;
 }
 
@@ -35,7 +38,7 @@ int main(int argc, char* argv[]){
     glutInit(&argc, argv);
     glutInitWindowSize(600, 600);
     glutCreateWindow("ftgl test");
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA); 
+    glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA); 
     glutDisplayFunc(Display);
 
 #ifdef __APPLE__

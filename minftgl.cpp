@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <string>
 
 #include <ft2build.h>
 #include <freetype.h>
@@ -45,6 +46,7 @@ minftgl::Font::Font(const char* font_path){
         fprintf(stderr, "minftgl::Font : Unknow err\n");
         exit(1);
     }
+    int error = FT_Set_Pixel_Sizes( face->cont, 0, 60);
     return;
 }
 
@@ -55,11 +57,14 @@ minftgl::Font::~Font(){
 minftgl::Label::Label(const wchar_t* str, Font* font){
     int pen_x = 0, pen_y = 0;
     auto slot = font->face->cont->glyph;
+    data = new preData;
     for(int lx = 0;str[lx] != 0;lx++){
-        int error = FT_Load_Char(font->face->cont, str[lx], FT_LOAD_RENDER);
+        unsigned int ch = str[lx];
+        int error = FT_Load_Char(font->face->cont, (unsigned int)ch, FT_LOAD_RENDER);
         if(error) continue;
         WordPack wp;
-        wp.dx = pen_x + slot->bitmap_left, wp.dy = pen_y - slot->bitmap_top;
+        wp.dx = pen_x;// + slot->bitmap_left;
+        wp.dy = pen_y;// - slot->bitmap_top;
         pen_x += slot->advance.x >> 6;
         glGenTextures(1, &wp.id);
         glBindTexture(GL_TEXTURE_2D, wp.id);
@@ -80,7 +85,7 @@ minftgl::Label::Label(const wchar_t* str, Font* font){
             }
         }
         gluBuild2DMipmaps(GL_TEXTURE_2D, 4, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf);
-        data->words.push_back(wp);        
+        data->words.push_back(wp);
         delete[] buf;
     }
     return;
@@ -89,13 +94,14 @@ minftgl::Label::Label(const wchar_t* str, Font* font){
 minftgl::Label::~Label(){
     for(auto& wp : data->words)
         glDeleteTextures(1, &wp.id);
+    delete data;
     return;
 }
 
 void minftgl::Label::Render(double left, double top){
     for(auto& wp : data->words){
         float x = wp.dx/(float)600 + left, y = wp.dy/(float)600 + top;
-        float draw_width = 0.2, draw_height = 0.2;
+        float draw_width = 0.1, draw_height = 0.1;
         float xs[] = {x, x + draw_width, x + draw_width, x};
         float xc[] = {0, 1, 1, 0};
         float ys[] = {y, y, y + draw_height, y + draw_height};
@@ -104,9 +110,9 @@ void minftgl::Label::Render(double left, double top){
         glBindTexture(GL_TEXTURE_2D, wp.id);
         glBegin(GL_POLYGON);
         for(int lx = 3;lx >= 0;lx--){
-            xs[lx] = xs[lx] - 1, ys[lx] = 1 - ys[lx];
+            xs[lx] = xs[lx], ys[lx] = ys[lx];
             glTexCoord2d((GLfloat)(xc[lx]), (GLfloat)(yc[lx]));
-            glVertex3f((GLfloat)(xs[lx]), (GLfloat)(ys[lx]), 0.01);
+            glVertex3f((GLfloat)(xs[lx]), (GLfloat)(ys[lx]), 1);
         }
         glEnd();
         glDisable(GL_TEXTURE_2D);

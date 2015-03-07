@@ -1,6 +1,7 @@
 #ifndef INCLUDE_MINFTGL_H
 #define INCLUDE_MINFTGL_H
 #include <cwchar>
+#include <string>
 struct preFace;
 struct preData;
 
