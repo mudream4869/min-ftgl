@@ -37,7 +37,7 @@ void minftgl::Init(){
     return;
 }
 
-minftgl::Font::Font(const char* font_path){
+minftgl::Font::Font(const char* font_path, int height){
     face = new preFace;
     int err = FT_New_Face(__global_library, font_path, 0, &face->cont);
     if(err == FT_Err_Unknown_File_Format){
@@ -47,7 +47,7 @@ minftgl::Font::Font(const char* font_path){
         fprintf(stderr, "minftgl::Font : Unknow err\n");
         exit(1);
     }
-    FT_Set_Char_Size(face->cont, 0, 60 << 6, 96, 96);
+    FT_Set_Char_Size(face->cont, 0, height << 6, 96, 96);
     return;
 
 }
@@ -103,9 +103,11 @@ minftgl::Label::~Label(){
 }
 
 void minftgl::Label::Render(double left, double top){
+    int win_h = glutGet(GLUT_WINDOW_WIDTH);
+    int win_w = glutGet(GLUT_WINDOW_HEIGHT);
     for(auto& wp : data->words){
-        float x = wp.dx/(float)600 + left, y = wp.dy/(float)600 + top;
-        float draw_width = wp.w/(float)600, draw_height = wp.h/(float)600;
+        float x = wp.dx/(float)win_w + left, y = wp.dy/(float)win_h + top;
+        float draw_width = wp.w/(float)win_w, draw_height = wp.h/(float)win_h;
         float xs[] = {x, x + draw_width, x + draw_width, x};
         float xc[] = {0, 1, 1, 0};
         float ys[] = {y, y, y + draw_height, y + draw_height};

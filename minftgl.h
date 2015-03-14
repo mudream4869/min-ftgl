@@ -9,7 +9,7 @@ namespace minftgl{
     
     class Font{
     public:
-        Font(const char* font_path);
+        Font(const char* font_path, int height = 60);
         ~Font();
         preFace* face;
     };
