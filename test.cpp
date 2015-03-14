@@ -17,8 +17,8 @@ void InitResource(){
     glEnable(GL_BLEND);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     font = new Font("fonts/test1.ttf");
-    label1 = new Label(L"中文字你我他", font);
-    label2 = new Label(L"哈哈哈", font);
+    label1 = new Label(L"中字你我他", font);
+    label2 = new Label(L"哈哈哈Test12[ ]1", font);
     return;
 }
 
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
     glutInit(&argc, argv);
     glutInitWindowSize(600, 600);
     glutCreateWindow("ftgl test");
-    glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA); 
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA); 
     glutDisplayFunc(Display);
 
 #ifdef __APPLE__

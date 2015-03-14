@@ -21,6 +21,7 @@ struct preFace{
 struct WordPack{
     GLuint id;
     int dx, dy;
+    int w, h;
 };
 
 struct preData{
@@ -46,8 +47,9 @@ minftgl::Font::Font(const char* font_path){
         fprintf(stderr, "minftgl::Font : Unknow err\n");
         exit(1);
     }
-    int error = FT_Set_Pixel_Sizes( face->cont, 0, 60);
+    FT_Set_Char_Size(face->cont, 0, 60 << 6, 96, 96);
     return;
+
 }
 
 minftgl::Font::~Font(){
@@ -63,8 +65,10 @@ minftgl::Label::Label(const wchar_t* str, Font* font){
         int error = FT_Load_Char(font->face->cont, (unsigned int)ch, FT_LOAD_RENDER);
         if(error) continue;
         WordPack wp;
-        wp.dx = pen_x;// + slot->bitmap_left;
-        wp.dy = pen_y;// - slot->bitmap_top;
+        wp.dx = pen_x + slot->bitmap_left;
+        wp.dy = pen_y;
+        wp.w = slot->bitmap.width;
+        wp.h = slot->bitmap.rows;
         pen_x += slot->advance.x >> 6;
         glGenTextures(1, &wp.id);
         glBindTexture(GL_TEXTURE_2D, wp.id);
@@ -73,7 +77,7 @@ minftgl::Label::Label(const wchar_t* str, Font* font){
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        int w = slot->bitmap.width, h = slot->bitmap.rows;
+        int w = wp.w, h = wp.h;
         unsigned char* buf = new unsigned char[4*w*h];
         for(int ly = 0;ly < h; ly++){
             for(int lx = 0;lx < w;lx++){
@@ -101,7 +105,7 @@ minftgl::Label::~Label(){
 void minftgl::Label::Render(double left, double top){
     for(auto& wp : data->words){
         float x = wp.dx/(float)600 + left, y = wp.dy/(float)600 + top;
-        float draw_width = 0.1, draw_height = 0.1;
+        float draw_width = wp.w/(float)600, draw_height = wp.h/(float)600;
         float xs[] = {x, x + draw_width, x + draw_width, x};
         float xc[] = {0, 1, 1, 0};
         float ys[] = {y, y, y + draw_height, y + draw_height};
