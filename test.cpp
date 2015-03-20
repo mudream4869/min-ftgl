@@ -12,19 +12,22 @@ using minftgl::Label;
 Font* font;
 Label* label1;
 Label* label2;
+Label* label3;
 
 void InitResource(){
     glEnable(GL_BLEND);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    font = new Font("fonts/test1.ttf");
+    font = new Font("fonts/test.ttf");
     label1 = new Label(L"中字你我他", font);
-    label2 = new Label(L"哈哈哈Test12[ ]1", font);
+    label2 = new Label(L"!@#$%^&*(()_", font);
+    label3 = new Label(L"abcdefghijk", font);
     return;
 }
 
 void Display(){
     label1->Render(0, 0);
     label2->Render(-0.5, -0.5);
+    label3->Render(-1, 0);
     glutSwapBuffers();
     return;
 }
@@ -32,6 +35,7 @@ void Display(){
 void CloseFunc(){
     delete label1;
     delete label2;
+    delete label3;
     exit(0);
 }
 

@@ -58,15 +58,15 @@ minftgl::Font::~Font(){
 
 minftgl::Label::Label(const wchar_t* str, Font* font){
     int pen_x = 0, pen_y = 0;
-    auto slot = font->face->cont->glyph;
     data = new preData;
     for(int lx = 0;str[lx] != 0;lx++){
         unsigned int ch = str[lx];
         int error = FT_Load_Char(font->face->cont, (unsigned int)ch, FT_LOAD_RENDER);
         if(error) continue;
+        auto slot = font->face->cont->glyph;
         WordPack wp;
         wp.dx = pen_x + slot->bitmap_left;
-        wp.dy = pen_y;
+        wp.dy = pen_y + slot->bitmap_top;
         wp.w = slot->bitmap.width;
         wp.h = slot->bitmap.rows;
         pen_x += slot->advance.x >> 6;
@@ -110,8 +110,8 @@ void minftgl::Label::Render(double left, double top){
         float draw_width = wp.w/(float)win_w, draw_height = wp.h/(float)win_h;
         float xs[] = {x, x + draw_width, x + draw_width, x};
         float xc[] = {0, 1, 1, 0};
-        float ys[] = {y, y, y + draw_height, y + draw_height};
-        float yc[] = {0, 0, 1, 1};
+        float ys[] = {y, y, y - draw_height, y - draw_height};
+        float yc[] = {1, 1, 0, 0};
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, wp.id);
         glBegin(GL_POLYGON);
