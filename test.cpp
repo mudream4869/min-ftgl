@@ -30,6 +30,8 @@ void Display(){
 }
 
 void CloseFunc(){
+    delete label1;
+    delete label2;
     exit(0);
 }
 
@@ -46,7 +48,10 @@ int main(int argc, char* argv[]){
 #endif
 
     InitResource();
-
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     glutMainLoop();
 
     return 0;
