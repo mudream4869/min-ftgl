@@ -20,7 +20,7 @@ void InitResource(){
     font = new Font("fonts/test.ttf");
     label1 = new Label(L"中字你我他", font);
     label2 = new Label(L"!@#$%^&*(()_", font);
-    label3 = new Label(L"abcdefghijk", font);
+    label3 = new Label(L"abcdefghijk", font, {125, 125, 0});
     return;
 }
 
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
 
     InitResource();
     
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glutMainLoop();

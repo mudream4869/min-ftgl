@@ -56,7 +56,7 @@ minftgl::Font::~Font(){
     delete face;
 }
 
-minftgl::Label::Label(const wchar_t* str, Font* font){
+minftgl::Label::Label(const wchar_t* str, Font* font, Color color){
     int pen_x = 0, pen_y = 0;
     data = new preData;
     for(int lx = 0;str[lx] != 0;lx++){
@@ -82,9 +82,9 @@ minftgl::Label::Label(const wchar_t* str, Font* font){
         for(int ly = 0;ly < h; ly++){
             for(int lx = 0;lx < w;lx++){
                 unsigned char val =  slot->bitmap.buffer[lx + w*ly];
-                buf[(4*lx + (h-ly-1)*w*4)  ] = 0xFF;
-                buf[(4*lx + (h-ly-1)*w*4)+1] = 0xFF;
-                buf[(4*lx + (h-ly-1)*w*4)+2] = 0xFF;
+                buf[(4*lx + (h-ly-1)*w*4)  ] = color.r;
+                buf[(4*lx + (h-ly-1)*w*4)+1] = color.g;
+                buf[(4*lx + (h-ly-1)*w*4)+2] = color.b;
                 buf[(4*lx + (h-ly-1)*w*4)+3] = val;
             }
         }
