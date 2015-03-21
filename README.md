@@ -3,7 +3,7 @@ smaller package of freetype gl
 
 ## screen shot
 
-![](https://raw.githubusercontent.com/mudream4869/min-ftgl/master/screenshot.png)
+![](shot.png)
 
 ## test font
 
