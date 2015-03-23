@@ -1,8 +1,8 @@
 os_switch: os_switch.cpp
-	$(CXX) os_switch.cpp -o os_switch
+	$(CXX) os_switch.cpp -o os_switch.out
 
 CFLAG = -Wno-deprecated-declarations -std=c++11
-OS = $(shell ./os_switch)
+OS = $(shell ./os_switch.out)
 
 ifeq ($(OS), apple)
 CFRAME = -framework OpenGL -framework GLUT -framework Foundation -framework Python -framework OpenAL 
