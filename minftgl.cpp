@@ -29,7 +29,10 @@ struct preFace{
 };
 
 struct WordPack{
+
+    /** Character's GL render id */
     GLuint id;
+    
     int dx, dy;
     int w, h;
 };
@@ -87,6 +90,8 @@ minftgl::Label::Label(const wchar_t* str, Font* font, Color color){
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        
+        /** change the black-white value to agba array*/
         int w = wp.w, h = wp.h;
         unsigned char* buf = new unsigned char[4*w*h];
         for(int ly = 0;ly < h; ly++){
@@ -98,7 +103,9 @@ minftgl::Label::Label(const wchar_t* str, Font* font, Color color){
                 buf[(4*lx + (h-ly-1)*w*4)+3] = val;
             }
         }
+        
         gluBuild2DMipmaps(GL_TEXTURE_2D, 4, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+
         data->words.push_back(wp);
         delete[] buf;
     }
